@@ -1,5 +1,6 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
+const ObjectId = require('mongodb').ObjectId
 require('dotenv').config();
 const cors = require('cors');
 const app = express();
@@ -22,6 +23,13 @@ async function run(){
             const eventsData = eventsCollection.find({});
             const result = await eventsData.toArray();
             res.json(result)
+        })
+        // get a event by id
+        app.get('/event/:id', async (req,res)=>{
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await eventsCollection.findOne(query);
+            res.json(result);
         })
     }
     finally {
